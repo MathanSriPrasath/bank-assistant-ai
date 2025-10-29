@@ -1,0 +1,149 @@
+.app {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.app-main {
+  flex: 1;
+  padding: 32px 20px;
+  overflow-y: auto;
+}
+
+.app-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.chat-container {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  height: calc(100vh - 420px);
+  min-height: 400px;
+  max-height: 600px;
+}
+
+.app-footer {
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(10px);
+  padding: 20px;
+  text-align: center;
+  color: white;
+  font-size: 13px;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.app-footer p {
+  margin: 0;
+  opacity: 0.9;
+}
+
+/* Toast Customization */
+.Toastify__toast {
+  border-radius: 8px;
+  font-family: inherit;
+  box-shadow: var(--shadow-lg);
+}
+
+.Toastify__toast--success {
+  background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+}
+
+.Toastify__toast--error {
+  background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
+}
+
+.Toastify__toast--info {
+  background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
+}
+
+.Toastify__progress-bar {
+  background: rgba(255, 255, 255, 0.7);
+}
+
+/* Loading Overlay */
+.loading-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.3);
+  backdrop-filter: blur(2px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 999;
+}
+
+/* Responsive Design */
+@media (max-width: 1024px) {
+  .app-main {
+    padding: 24px 16px;
+  }
+
+  .chat-container {
+    height: calc(100vh - 400px);
+    min-height: 350px;
+  }
+}
+
+@media (max-width: 768px) {
+  .app-main {
+    padding: 20px 12px;
+  }
+
+  .app-container {
+    gap: 16px;
+  }
+
+  .chat-container {
+    height: calc(100vh - 380px);
+    min-height: 300px;
+    gap: 16px;
+  }
+
+  .app-footer {
+    padding: 16px;
+    font-size: 12px;
+  }
+}
+
+@media (max-width: 480px) {
+  .chat-container {
+    height: calc(100vh - 360px);
+    min-height: 280px;
+  }
+}
+
+/* Accessibility */
+@media (prefers-reduced-motion: reduce) {
+  * {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+/* Print Styles */
+@media print {
+  .app-footer,
+  .quick-actions,
+  .search-bar {
+    display: none;
+  }
+
+  .app {
+    background: white;
+  }
+
+  .chat-container {
+    height: auto;
+    max-height: none;
+  }
+}
+

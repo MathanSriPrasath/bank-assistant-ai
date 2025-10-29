@@ -1,0 +1,115 @@
+.account-details {
+  margin-top: 12px;
+  padding: 16px;
+  background: rgba(255, 255, 255, 0.95);
+  border-radius: 12px;
+  border: 2px solid var(--border-color);
+}
+
+.message-user .account-details {
+  background: rgba(255, 255, 255, 0.15);
+  border-color: rgba(255, 255, 255, 0.3);
+  backdrop-filter: blur(10px);
+}
+
+.account-header {
+  margin-bottom: 12px;
+  padding-bottom: 8px;
+  border-bottom: 1px solid var(--border-color);
+}
+
+.message-user .account-header {
+  border-color: rgba(255, 255, 255, 0.3);
+}
+
+.account-title {
+  margin: 0;
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+.message-user .account-title {
+  color: white;
+}
+
+.account-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 10px;
+}
+
+.account-field {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.field-label {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--text-secondary);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.message-user .field-label {
+  color: rgba(255, 255, 255, 0.8);
+}
+
+.field-value {
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--text-primary);
+}
+
+.message-user .field-value {
+  color: white;
+}
+
+.status-badge {
+  display: inline-block;
+  padding: 4px 12px;
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.status-success {
+  background: #dcfce7;
+  color: #166534;
+}
+
+.status-warning {
+  background: #fef3c7;
+  color: #92400e;
+}
+
+.message-user .status-success {
+  background: rgba(220, 252, 231, 0.3);
+  color: white;
+}
+
+.message-user .status-warning {
+  background: rgba(254, 243, 199, 0.3);
+  color: white;
+}
+
+@media (max-width: 768px) {
+  .account-details {
+    padding: 12px;
+  }
+
+  .account-title {
+    font-size: 14px;
+  }
+
+  .field-label {
+    font-size: 11px;
+  }
+
+  .field-value {
+    font-size: 13px;
+  }
+}
+
