@@ -124,10 +124,11 @@ def get_bank_keyword_response(query: str) -> str or None:
     
     return None
 
-def get_general_llm_response(query: str) -> str:
+def get_general_llm_response(query: str, user_context: dict = None) -> str:
     """
     Combines the final two fallback steps:
     Step 3 (Generic Keywords) and Step 4 (Gemini LLM API).
+    Now includes user context for personalized responses.
     """
     normalized_input = query.lower().strip()
 
@@ -139,7 +140,26 @@ def get_general_llm_response(query: str) -> str:
     # Step 4: Fallback to the LLM API
     if LLM_AVAILABLE and client:
         try:
+            # Build system instruction with user context if available
             system_instruction = "You are a helpful and professional bank assistant. If the query is not bank-related, answer it professionally and briefly."
+            
+            # If user is logged in, add their context to the system instruction
+            if user_context and user_context.get('account_data'):
+                account_data = user_context.get('account_data')
+                system_instruction += f"""
+                
+                The user is currently logged in. Here are their account details:
+                - Name: {account_data.get('holder_name')}
+                - Account Number: {account_data.get('account_no')}
+                - Account Type: {account_data.get('account_type')}
+                - Branch: {account_data.get('branch_name')}
+                - Loan Status: {account_data.get('loan_status')}
+                - Loan End Date: {account_data.get('loan_end_date')}
+                
+                When answering queries, use this information to provide personalized responses. 
+                For example, if they ask about their account, loan status, or branch, use these details.
+                Address them by their name when appropriate.
+                """
             
             response = client.models.generate_content(
                 model="gemini-2.5-flash",
@@ -172,6 +192,63 @@ def health_check():
         "llm_available": LLM_AVAILABLE,
         "service": "Bank Assistant API"
     })
+
+@app.route('/api/auth/login', methods=['POST'])
+def login():
+    """
+    Login endpoint - validates phone number and returns account details
+    Body: { "mobile_number": "1234567890" }
+    """
+    try:
+        data = request.get_json()
+        mobile_number = data.get('mobile_number', '').strip()
+        
+        if not mobile_number:
+            return jsonify({
+                "success": False,
+                "error": "Mobile number is required"
+            }), 400
+        
+        if not (len(mobile_number) == 10 and mobile_number.isdigit()):
+            return jsonify({
+                "success": False,
+                "error": "Please enter a valid 10-digit mobile number"
+            }), 400
+        
+        # Fetch account details to verify user exists
+        account_data = fetch_account_details(mobile_number)
+        
+        if account_data is None:
+            return jsonify({
+                "success": False,
+                "error": f"No account found for mobile number {mobile_number}. Please check your number."
+            }), 404
+        
+        if "error" in account_data:
+            return jsonify({
+                "success": False,
+                "error": "Database connection failed"
+            }), 500
+        
+        # Return user data with account details
+        return jsonify({
+            "success": True,
+            "data": {
+                "mobile_number": mobile_number,
+                "holder_name": account_data.get('holder_name'),
+                "account_no": account_data.get('account_no'),
+                "branch_name": account_data.get('branch_name'),
+                "account_type": account_data.get('account_type'),
+                "loan_status": account_data.get('loan_status') or 'No Active Loans',
+                "loan_end_date": str(account_data.get('end_date') or 'N/A')
+            }
+        })
+        
+    except Exception as e:
+        return jsonify({
+            "success": False,
+            "error": str(e)
+        }), 500
 
 @app.route('/api/account/details', methods=['POST'])
 def get_account_details():
@@ -231,12 +308,19 @@ def get_account_details():
 @app.route('/api/chat/query', methods=['POST'])
 def chat_query():
     """
-    Endpoint to handle general chat queries
-    Body: { "query": "How do I apply for a loan?" }
+    Endpoint to handle general chat queries with optional user context
+    Body: { 
+        "query": "How do I apply for a loan?",
+        "user_context": {
+            "mobile_number": "1234567890",
+            "account_data": {...}
+        }
+    }
     """
     try:
         data = request.get_json()
         query = data.get('query', '').strip()
+        user_context = data.get('user_context', None)
         
         if not query:
             return jsonify({
@@ -247,9 +331,9 @@ def chat_query():
         # First check bank-specific keywords
         response = get_bank_keyword_response(query)
         
-        # If no keyword match, use general LLM response
+        # If no keyword match, use general LLM response with user context
         if response is None:
-            response = get_general_llm_response(query)
+            response = get_general_llm_response(query, user_context)
         
         return jsonify({
             "success": True,

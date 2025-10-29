@@ -9,6 +9,10 @@ export const BANK_ACTION_TYPES = {
   SET_ACCOUNT_DATA: 'SET_ACCOUNT_DATA',
   CLEAR_ACCOUNT_DATA: 'CLEAR_ACCOUNT_DATA',
   
+  // Authentication
+  SET_USER: 'SET_USER',
+  LOGOUT_USER: 'LOGOUT_USER',
+  
   // Loading & Errors
   SET_LOADING: 'SET_LOADING',
   SET_ERROR: 'SET_ERROR',
@@ -72,5 +76,14 @@ export const closeModal = () => ({
 export const setHealthStatus = (healthData) => ({
   type: BANK_ACTION_TYPES.SET_HEALTH_STATUS,
   payload: healthData,
+});
+
+export const setUser = (userData) => ({
+  type: BANK_ACTION_TYPES.SET_USER,
+  payload: userData,
+});
+
+export const logoutUser = () => ({
+  type: BANK_ACTION_TYPES.LOGOUT_USER,
 });
 

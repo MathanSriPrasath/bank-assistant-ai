@@ -12,6 +12,8 @@ import {
   setModal,
   closeModal,
   setHealthStatus,
+  setUser,
+  logoutUser,
 } from './actions/bankActions';
 import { MESSAGE_TYPES } from '../constants';
 import { checkHealth } from '../api/bankApi';
@@ -55,6 +57,10 @@ export const BankProvider = ({ children }) => {
     // Account Actions
     setAccountData: (data) => dispatch(setAccountData(data)),
     clearAccountData: () => dispatch(clearAccountData()),
+    
+    // Authentication Actions
+    setUser: (userData) => dispatch(setUser(userData)),
+    logoutUser: () => dispatch(logoutUser()),
     
     // Loading & Error Actions
     setLoading: (isLoading) => dispatch(setLoading(isLoading)),

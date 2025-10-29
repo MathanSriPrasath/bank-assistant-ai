@@ -3,6 +3,7 @@ export const API_BASE_URL = process.env.REACT_APP_API_URL || 'http://localhost:5
 
 export const API_ENDPOINTS = {
   HEALTH: '/api/health',
+  LOGIN: '/api/auth/login',
   ACCOUNT_DETAILS: '/api/account/details',
   CHAT_QUERY: '/api/chat/query',
   LOAN_INFO: '/api/info/loans',

@@ -64,13 +64,30 @@ export const fetchAccountDetails = async (mobileNumber) => {
 };
 
 /**
+ * Login with phone number
+ * @param {string} mobileNumber - 10-digit mobile number
+ */
+export const loginWithPhone = async (mobileNumber) => {
+  try {
+    const response = await apiClient.post(API_ENDPOINTS.LOGIN, {
+      mobile_number: mobileNumber,
+    });
+    return response.data;
+  } catch (error) {
+    throw handleError(error);
+  }
+};
+
+/**
  * Send a chat query to the bot
  * @param {string} query - User query/message
+ * @param {object} userContext - Optional user context for personalized responses
  */
-export const sendChatQuery = async (query) => {
+export const sendChatQuery = async (query, userContext = null) => {
   try {
     const response = await apiClient.post(API_ENDPOINTS.CHAT_QUERY, {
       query: query,
+      user_context: userContext,
     });
     return response.data;
   } catch (error) {

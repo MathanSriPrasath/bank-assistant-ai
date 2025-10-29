@@ -6,6 +6,7 @@ import {
   getLoanInfo,
   getBranchInfo,
   getContactInfo,
+  loginWithPhone,
 } from '../api/bankApi';
 import { MESSAGE_TYPES } from '../constants';
 import { validateMobileNumber, sanitizeInput } from '../utils/validators';
@@ -26,7 +27,58 @@ const useBank = () => {
     clearError,
     setModal,
     closeModal,
+    setUser,
+    logoutUser,
   } = useBankContext();
+
+  /**
+   * Handle user login
+   */
+  const handleLogin = useCallback(
+    async (mobileNumber) => {
+      try {
+        setLoading(true);
+        clearError();
+
+        // Validate mobile number
+        const validation = validateMobileNumber(mobileNumber);
+        if (!validation.isValid) {
+          setError(validation.error);
+          return { success: false, error: validation.error };
+        }
+
+        // Login with phone
+        const response = await loginWithPhone(mobileNumber);
+
+        if (response.success) {
+          // Set user data in context
+          setUser({
+            mobileNumber: response.data.mobile_number,
+            accountData: response.data,
+          });
+
+          return { success: true, data: response.data };
+        } else {
+          setError(response.error || 'Login failed');
+          return { success: false, error: response.error };
+        }
+      } catch (error) {
+        const errorMessage = error.message || 'Login failed. Please try again.';
+        setError(errorMessage);
+        return { success: false, error: errorMessage };
+      } finally {
+        setLoading(false);
+      }
+    },
+    [setLoading, clearError, setError, setUser]
+  );
+
+  /**
+   * Handle user logout
+   */
+  const handleLogout = useCallback(() => {
+    logoutUser();
+  }, [logoutUser]);
 
   /**
    * Handle account details lookup
@@ -111,8 +163,13 @@ const useBank = () => {
         // Show typing indicator
         setTyping(true);
 
-        // Send query to backend
-        const response = await sendChatQuery(sanitizedQuery);
+        // Send query to backend with user context if authenticated
+        const userContext = state.isAuthenticated && state.user ? {
+          mobile_number: state.user.mobileNumber,
+          account_data: state.user.accountData,
+        } : null;
+
+        const response = await sendChatQuery(sanitizedQuery, userContext);
 
         setTyping(false);
 
@@ -221,6 +278,8 @@ const useBank = () => {
     // State
     messages: state.messages,
     accountData: state.accountData,
+    user: state.user,
+    isAuthenticated: state.isAuthenticated,
     isTyping: state.isTyping,
     isLoading: state.isLoading,
     error: state.error,
@@ -228,6 +287,8 @@ const useBank = () => {
     healthStatus: state.healthStatus,
 
     // Actions
+    handleLogin,
+    handleLogout,
     handleAccountLookup,
     handleChatQuery,
     handleQuickAction,

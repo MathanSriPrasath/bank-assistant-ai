@@ -7,6 +7,7 @@ import ChatInterface from './ChatInterface/ChatInterface';
 import SearchBar from './SearchBar/SearchBar';
 import AccountModal from './AccountModal/AccountModal';
 import ErrorMessage from './ErrorMessage/ErrorMessage';
+import Login from './Login/Login';
 import useBank from '../hooks/useBank';
 import { TOAST_CONFIG } from '../constants';
 import './App.css';
@@ -19,6 +20,10 @@ function App() {
     error,
     modal,
     healthStatus,
+    user,
+    isAuthenticated,
+    handleLogin,
+    handleLogout,
     handleAccountLookup,
     handleChatQuery,
     handleQuickAction,
@@ -33,6 +38,14 @@ function App() {
     }
   }, [error]);
 
+  // Handle login submission
+  const handleLoginSubmit = async (mobileNumber) => {
+    const result = await handleLogin(mobileNumber);
+    if (result.success) {
+      toast.success(`Welcome ${result.data.holder_name}!`, TOAST_CONFIG);
+    }
+  };
+
   // Handle account modal submission
   const handleModalSubmit = async (mobileNumber) => {
     const result = await handleAccountLookup(mobileNumber);
@@ -42,9 +55,19 @@ function App() {
     }
   };
 
+  // Show login screen if not authenticated
+  if (!isAuthenticated) {
+    return (
+      <>
+        <Login onLogin={handleLoginSubmit} isLoading={isLoading} />
+        <ToastContainer />
+      </>
+    );
+  }
+
   return (
     <div className="app">
-      <Header healthStatus={healthStatus} />
+      <Header healthStatus={healthStatus} user={user} onLogout={handleLogout} />
       
       <main className="app-main">
         <div className="app-container">

@@ -4,6 +4,8 @@ import { MESSAGE_TYPES } from '../../constants';
 export const initialState = {
   messages: [],
   accountData: null,
+  user: null,
+  isAuthenticated: false,
   isTyping: false,
   isLoading: false,
   error: null,
@@ -105,6 +107,23 @@ export const bankReducer = (state, action) => {
           llmAvailable: action.payload.llm_available || false,
           lastChecked: new Date(),
         },
+      };
+
+    case BANK_ACTION_TYPES.SET_USER:
+      return {
+        ...state,
+        user: action.payload,
+        isAuthenticated: true,
+        accountData: action.payload.accountData,
+      };
+
+    case BANK_ACTION_TYPES.LOGOUT_USER:
+      return {
+        ...state,
+        user: null,
+        isAuthenticated: false,
+        accountData: null,
+        messages: [],
       };
 
     default:
