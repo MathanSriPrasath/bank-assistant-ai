@@ -19,13 +19,13 @@ const ChatInterface = ({ messages, isTyping }) => {
       <div className="messages-container">
         {messages.length === 0 ? (
           <div className="empty-state">
-            <div className="empty-icon">💬</div>
-            <h3>Welcome to Cardy AI!</h3>
+            <div className="empty-icon">🏦</div>
+            <h3>Welcome to Cardy AI Banking Assistant!</h3>
             <p>
-              I'm your intelligent banking assistant. Ask me anything about your
-              account, loans, branches, or general banking queries.
+              I'm here to assist you with all your banking needs - account inquiries, 
+              loans, transactions, branch information, and financial services.
             </p>
-            <p className="empty-hint">Try: "Check my account details" or "Apply for a loan"</p>
+            <p className="empty-hint">💡 I specialize in banking services only</p>
           </div>
         ) : (
           <>

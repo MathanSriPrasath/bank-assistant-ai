@@ -57,6 +57,12 @@ const useBank = () => {
             accountData: response.data,
           });
 
+          // Add welcome message
+          addMessage({
+            type: MESSAGE_TYPES.BOT,
+            text: `Welcome back, ${response.data.holder_name}! 🏦\n\nI'm your banking assistant. I can help you with:\n• Account information and balances\n• Loan inquiries and applications\n• Branch locations and services\n• Transaction queries\n• Banking support\n\nHow can I assist you with your banking needs today?`,
+          });
+
           return { success: true, data: response.data };
         } else {
           setError(response.error || 'Login failed');

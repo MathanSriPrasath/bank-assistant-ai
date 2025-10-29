@@ -86,7 +86,7 @@ function App() {
             <SearchBar
               onSubmit={handleChatQuery}
               disabled={isLoading}
-              placeholder="Ask me anything about your account or banking services..."
+              placeholder="Ask about your account, loans, transactions, or banking services..."
             />
           </div>
         </div>

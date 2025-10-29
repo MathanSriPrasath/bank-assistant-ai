@@ -40,8 +40,8 @@ function Login({ onLogin, isLoading }) {
           <div className="login-icon">
             <FaLock />
           </div>
-          <h1>🤖 Cardy AI</h1>
-          <p>Your Intelligent Banking Assistant</p>
+          <h1>🏦 Cardy AI</h1>
+          <p>Your Banking Assistant</p>
         </div>
 
         <form onSubmit={handleSubmit} className="login-form">
@@ -80,20 +80,20 @@ function Login({ onLogin, isLoading }) {
 
         <div className="login-footer">
           <p className="info-text">
-            <strong>📌 Note:</strong> Use your registered mobile number to access your account
+            <strong>📌 Note:</strong> Use your registered mobile number to access banking services
           </p>
           <div className="features">
             <div className="feature">
-              <span>✅</span>
-              <span>Secure Login</span>
+              <span>🔒</span>
+              <span>Secure Banking</span>
             </div>
             <div className="feature">
-              <span>🤖</span>
-              <span>AI-Powered Assistance</span>
+              <span>🏦</span>
+              <span>Banking Services</span>
             </div>
             <div className="feature">
               <span>💳</span>
-              <span>Account Management</span>
+              <span>Account Support</span>
             </div>
           </div>
         </div>
